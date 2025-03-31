@@ -1,3 +1,12 @@
+from enum import Enum
+
+class Directions(Enum):
+    UP = 1
+    DOWN = 2
+    DIAG = 3
+    LEFT = 4
+    RIGHT = 5
+
 def matrix_generation(first_sentence, second_sentence):
     if isinstance(first_sentence, str) == False or isinstance(second_sentence, str) == False:
         raise TypeError("One of the inputs is not a string.")
@@ -29,4 +38,29 @@ def edge_filler(matrix, gap_penalty):
             #     matrix[i][j] = matrix[i][j] + missmatch
     return matrix
 
-matrix_printer(edge_filler(matrix_generation("cat", "tac"),-1))
+
+def needleman_wunsch(matrix, match_score, mismatch_penalty, gap_penalty):
+    rows = len(matrix)
+    cols = len(matrix[0])
+
+    for i in range(2, rows):
+        for j in range(2, cols):
+            if isinstance(matrix[i][0], str) and isinstance(matrix[0][j], str):
+                if matrix[i][0] == matrix[0][j]:
+                    score = match_score
+                else:
+                    score = mismatch_penalty
+
+                match = matrix[i - 1][j - 1] + score
+                delete = matrix[i - 1][j] + gap_penalty
+                insert = matrix[i][j - 1] + gap_penalty
+
+                matrix[i][j] = max(match, delete, insert)
+
+    return matrix
+
+
+matrix = matrix_generation("CTCGCAGC ", "CATTCAC")
+matrix = edge_filler(matrix, -5)
+matrix = needleman_wunsch(matrix, 10, -2, -5)
+matrix_printer(matrix)
