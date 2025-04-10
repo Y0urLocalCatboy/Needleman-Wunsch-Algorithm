@@ -1,6 +1,3 @@
-from tkinter import *
-from tkinter import ttk
-
 def matrix_generation(first_sentence, second_sentence):
 
     if isinstance(first_sentence, str) == False or isinstance(second_sentence, str) == False:
@@ -118,12 +115,12 @@ def traceback(directional_matrix, first_sentence, second_sentence):
 
         path.append(current_direction)
 
-        if i <= 1 and j > 1:
+        if i <= 1 < j:
             alignment1.append('-')
             alignment2.append(second_sentence[j-2])
             j -= 1
             continue
-        elif j <= 1 and i > 1:
+        elif j <= 1 < i:
             alignment1.append(first_sentence[i-2])
             alignment2.append('-')
             i -= 1
@@ -165,50 +162,16 @@ def comparision_analyzer(first_allingment, second_allingment):
         else:
             comparision = comparision + "!"
     return comparision
-matrix = needleman_wunsch("CATTCAC","CTCGCAGC", 10, -2, -5)
-matrix_printer(matrix)
-matrix = needleman_wunsch_directions(matrix, 10, -2, -5)
-matrix_printer(matrix)
+def main(first_sentence, second_sentence, match_score, mismatch_penalty, gap_penalty):
+    matrix = needleman_wunsch(first_sentence, second_sentence, match_score, mismatch_penalty, gap_penalty)
+    matrix_printer(matrix)
+    matrix = needleman_wunsch_directions(matrix, match_score, mismatch_penalty, gap_penalty)
+    matrix_printer(matrix)
 
-path, aligned_seq1, aligned_seq2 = traceback(matrix, "CATTCAC", "CTCGCAGC")
+    path, aligned_seq1, aligned_seq2 = traceback(matrix, first_sentence, second_sentence)
 
-print("Path:", path)
-print("1:", aligned_seq1)
-print("2:", aligned_seq2)
-print ("Match score:", (similarity_score(aligned_seq1, aligned_seq2)*100).__round__(2), "%")
-print("Comparision:", comparision_analyzer(aligned_seq1, aligned_seq2))
-
-root = Tk()
-root.title("Needleman Wunsch Algorithm")
-mainframe = ttk.Frame(root, padding="3 3 12 12")
-mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
-root.columnconfigure(0, weight=1)
-root.rowconfigure(0, weight=1)
-
-first_sentence = StringVar()
-first_stentence_entry = ttk.Entry(mainframe, width=7, textvariable=first_sentence)
-second_sentence = StringVar()
-second_sentence_entry = ttk.Entry(mainframe, width=7, textvariable=second_sentence)
-missmatch_penalty = StringVar()
-missmatch_penalty_entry = ttk.Entry(mainframe, width=7, textvariable=missmatch_penalty)
-gap_penalty = StringVar()
-gap_penalty_entry = ttk.Entry(mainframe, width=7, textvariable=gap_penalty)
-match_score = StringVar()
-match_score_entry = ttk.Entry(mainframe, width=7, textvariable=match_score)
-ttk.Label(mainframe, text="First sentence").grid(column=1, row=1, sticky=W)
-ttk.Label(mainframe, text="Second sentence").grid(column=3, row=1, sticky=W)
-ttk.Label(mainframe, text="Match score").grid(column=1, row=3, sticky=W)
-ttk.Label(mainframe, text="Mismatch penalty").grid(column=3, row=3, sticky=W)
-ttk.Label(mainframe, text="Gap penalty").grid(column=1, row=4, sticky=W)
-
-first_stentence_entry.grid(column=2, row=2, sticky=(W, E))
-second_sentence_entry.grid(column=4, row=2, sticky=(W, E))
-missmatch_penalty_entry.grid(column=2, row=4, sticky=(W, E))
-gap_penalty_entry.grid(column=4, row=4, sticky=(W, E))
-match_score_entry.grid(column=2, row=3, sticky=(W, E))
-
-ttk.Button(mainframe, text="Calculate", command=lambda: matrix_printer(needleman_wunsch(first_sentence.get(), second_sentence.get(), int(match_score.get()), int(missmatch_penalty.get()), int(gap_penalty.get())))).grid(column=2, row=5, sticky=W)
-
-
-# first_sentence second_sentence missmatch_penalty gap_penalty match_score
-root.mainloop()
+    print("Path:", path)
+    print("1:", aligned_seq1)
+    print("2:", aligned_seq2)
+    print("Match score:", (similarity_score(aligned_seq1, aligned_seq2) * 100).__round__(2), "%")
+    print("Comparision:", comparision_analyzer(aligned_seq1, aligned_seq2))
