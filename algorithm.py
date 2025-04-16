@@ -20,10 +20,10 @@ def matrix_printer(matrix):
     print("")
 
 def edge_filler(matrix, gap_penalty):
+    for j in range(2, len(matrix[0])):
+        matrix[1][j] = gap_penalty * (j-1)
     for i in range(2, len(matrix)):
-        for j in range(2, len(matrix[i])):
-            matrix[i][1] = gap_penalty * (i-1)
-            matrix[1][j] = gap_penalty * (j-1)
+        matrix[i][1] = gap_penalty * (i-1)
     return matrix
 
 def needleman_wunsch(first_sentence, second_sentence, match_score, mismatch_penalty, gap_penalty):
@@ -97,13 +97,19 @@ def needleman_wunsch_directions(matrix, match_score, mismatch_penalty, gap_penal
     return directional_matrix
 
 
-def traceback(directional_matrix, first_sentence, second_sentence):
+def traceback(numeric_matrix, directional_matrix, first_sentence, second_sentence):
     path = []
     alignment1 = []
     alignment2 = []
 
     i = len(directional_matrix) - 1
     j = len(directional_matrix[0]) - 1
+    biggest_number = numeric_matrix[i][j]
+    for counter in range(len(directional_matrix[0]) - 1, 1, -1):
+        if numeric_matrix[i][counter] > biggest_number:
+            biggest_number = numeric_matrix[i][j]
+            j = counter
+            alignment1.
 
     while i > 1 or j > 1:
         current_direction = directional_matrix[i][j]
@@ -126,7 +132,7 @@ def traceback(directional_matrix, first_sentence, second_sentence):
             i -= 1
             continue
 
-        if current_direction == "DIAG" or current_direction == "DIAG_UP" or current_direction == "DIAG_LEFT":
+        if current_direction == "DIAG" or current_direction == "DIAG_UP" or current_direction == "DIAG_LEFT" or current_direction == "DIAG_UP_LEFT":
             alignment1.append(first_sentence[i-2])
             alignment2.append(second_sentence[j-2])
             i -= 1
@@ -152,6 +158,7 @@ def similarity_score(first_allingment, second_allingment):
         if first_allingment[i] == second_allingment[i]:
             score += 1
     return score/len(first_allingment)
+
 def comparision_analyzer(first_allingment, second_allingment):
     comparision = ""
     for i in range(len(first_allingment)):
@@ -163,15 +170,21 @@ def comparision_analyzer(first_allingment, second_allingment):
             comparision = comparision + "!"
     return comparision
 def main(first_sentence, second_sentence, match_score, mismatch_penalty, gap_penalty):
-    matrix = needleman_wunsch(first_sentence, second_sentence, match_score, mismatch_penalty, gap_penalty)
-    matrix_printer(matrix)
-    matrix = needleman_wunsch_directions(matrix, match_score, mismatch_penalty, gap_penalty)
-    matrix_printer(matrix)
+    numeric_matrix = needleman_wunsch(first_sentence, second_sentence, match_score, mismatch_penalty, gap_penalty)
+    matrix_printer(numeric_matrix)
+    directional_matrix = needleman_wunsch_directions(numeric_matrix, match_score, mismatch_penalty, gap_penalty)
+    matrix_printer(directional_matrix)
 
-    path, aligned_seq1, aligned_seq2 = traceback(matrix, first_sentence, second_sentence)
+    path, aligned_seq1, aligned_seq2 = traceback(numeric_matrix, directional_matrix, first_sentence, second_sentence)
 
+    print(f"Missmatch = {mismatch_penalty} ")
+    print(f"Gap = {gap_penalty}")
+    print(f"Match = {match_score}")
     print("Path:", path)
     print("1:", aligned_seq1)
     print("2:", aligned_seq2)
     print("Match score:", (similarity_score(aligned_seq1, aligned_seq2) * 100).__round__(2), "%")
+    print("* -> match")
+    print("- -> gap")
+    print("! -> missmatch")
     print("Comparision:", comparision_analyzer(aligned_seq1, aligned_seq2))
