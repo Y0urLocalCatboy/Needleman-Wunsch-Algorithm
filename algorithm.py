@@ -279,12 +279,9 @@ def mark_optimal_path(matrix, path_coordinates):
     Returns:
         list: A copy of the matrix with the optimal path marked
     """
-    # Create a deep copy to avoid modifying the original matrix
     marked_matrix = [row[:] for row in matrix]
 
-    # Mark each cell in the path
     for i, j in path_coordinates:
-        # Handle the case where the cell contains a direction or a number
         if isinstance(marked_matrix[i][j], str) and len(marked_matrix[i][j]) > 1:
             marked_matrix[i][j] = f"[{marked_matrix[i][j]}]"
         else:
