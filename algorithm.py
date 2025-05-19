@@ -273,3 +273,15 @@ def main(sequences, match_score, mismatch_penalty, gap_penalty):
         print(f"Sequence {i + 1}: {seq}")
     
     return aligned_sequences
+
+def display_sequences(sequences):
+    '''Displays sequences and deletes all the UNNECESSARY gaps at the end of the sequences.'''
+    all_end_with_gap = all(seq.endswith('-') for seq in sequences)
+    
+    if all_end_with_gap:
+        cleaned_sequences = [seq.rstrip('-') for seq in sequences]
+    else:
+        cleaned_sequences = sequences
+    
+    for i, seq in enumerate(cleaned_sequences, 1):
+        print(f"Sequence {i} (length: {len(seq)}): {seq}")
