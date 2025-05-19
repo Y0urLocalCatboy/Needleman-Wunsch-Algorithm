@@ -189,26 +189,26 @@ def calculate_sequence_statistics(aligned_sequences):
 
 
 def generate_statistics_report(aligned_sequences, statistics, original_sequences):
-    """Generate a detailed report of the alignment statistics"""
+    """Generate a stastitscal report of the alignment(s)"""
     filename = "statistics.txt"
 
     with open(filename, 'w') as f:
-        f.write("Multiple Sequence Alignment Statistics Report\n")
+        f.write("Multiple Sequence Alignment Statistics\n")
         f.write("=" * 50 + "\n\n")
 
-        f.write("Input Sequences:\n")
+        f.write("Input sequences:\n")
         f.write("-" * 50 + "\n")
         for i, seq in enumerate(original_sequences, 1):
             f.write(f"Sequence {i} (length: {len(seq)}): {seq}\n")
         f.write("\n")
 
-        f.write("Aligned Sequences:\n")
+        f.write("Aligned sequences:\n")
         f.write("-" * 50 + "\n")
         for i, seq in enumerate(aligned_sequences, 1):
             f.write(f"Sequence {i} (length: {len(seq)}): {seq}\n")
         f.write("\n")
 
-        f.write("Overall Statistics:\n")
+        f.write("Overall statistics:\n")
         f.write("-" * 50 + "\n")
         f.write(f"Number of sequences: {statistics['num_sequences']}\n")
         f.write(f"Alignment length: {statistics['total_length']}\n")
@@ -219,7 +219,7 @@ def generate_statistics_report(aligned_sequences, statistics, original_sequences
         f.write(f"Weakly conserved positions: {statistics['weakly_conserved_positions']}\n")
         f.write("\n")
 
-        f.write("Pairwise Sequence Comparisons:\n")
+        f.write("Pairwise sequence comparisons:\n")
         f.write("-" * 50 + "\n")
         for stat in statistics['pairwise_stats']:
             f.write(f"Sequence {stat['seq1']} vs Sequence {stat['seq2']}:\n")
@@ -228,7 +228,7 @@ def generate_statistics_report(aligned_sequences, statistics, original_sequences
             f.write(f"  Gaps: {stat['gaps']}\n")
             f.write(f"  Identity: {stat['identity']:.2f}%\n\n")
 
-        f.write("Conservation Pattern:\n")
+        f.write("Conservation pattern:\n")
         f.write("-" * 50 + "\n")
         f.write("Key: + = fully conserved, : = strongly conserved, . = weakly conserved\n")
 
@@ -237,7 +237,7 @@ def generate_statistics_report(aligned_sequences, statistics, original_sequences
             f.write(f"{i + 1:>4} {conservation[i:i + 60]}\n")
         f.write("\n")
 
-        f.write("Gap Distribution:\n")
+        f.write("Gap distribution:\n")
         f.write("-" * 50 + "\n")
         f.write("Position: Number of gaps\n")
         for pos, gaps in enumerate(statistics['gap_distribution'], 1):
