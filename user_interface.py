@@ -230,6 +230,9 @@ def generate_statistics_report(aligned_sequences, statistics, original_sequences
 
         f.write("Conservation pattern:\n")
         f.write("-" * 50 + "\n")
+        f.write("Fully conserved means all sequences have the same residue at that position.\n")
+        f.write("Strongly conserved means most sequences have the same residue at that position.\n")
+        f.write("Weakly conserved means some sequences have the same residue at that position.\n")
         f.write("Key: + = fully conserved, : = strongly conserved, . = weakly conserved\n")
 
         conservation = ''.join(statistics['conservation_by_position'])
